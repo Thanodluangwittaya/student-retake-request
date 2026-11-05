@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Sarabun', sans-serif;
+      background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 50%, #f8fafc 100%);
+      min-height: 100vh;
+      padding: 20px 16px;
+      color: #1e293b;
+    }
+
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .header h1 {
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 6px;
+    }
+
+    .header p {
+      color: #64748b;
+      font-size: 0.95rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px -10px rgba(0,0,0,0.08);
+      padding: 28px 24px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 14px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 16px;
+      font-family: 'Sarabun', sans-serif;
+      transition: all 0.2s;
+      outline: none;
+    }
+
+    input[type="text"]:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 4px rgba(59,130,246,0.15);
+    }
+
+    .btn {
+      padding: 14px 22px;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: 'Sarabun', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: white;
+      box-shadow: 0 4px 14px rgba(37,99,235,0.35);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(37,99,235,0.4);
+    }
+
+    .btn-primary:disabled {
+      background: #94a3b8;
+      box-shadow: none;
+      transform: none;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .btn-secondary:hover {
+      background: #e2e8f0;
+    }
+
+    .student-badge {
+      background: linear-gradient(135deg, #eff6ff, #dbeafe);
+      border: 1px solid #bfdbfe;
+      border-radius: 14px;
+      padding: 16px 20px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .student-badge .label {
+      font-size: 0.85rem;
+      color: #3b82f6;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .student-badge .name {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1e40af;
+    }
+
+    .subject-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 16px;
+      transition: all 0.2s;
+    }
+
+    .subject-card:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+
+    .subject-card.requested {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+    }
+
+    .subject-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+
+    .subject-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #0f172a;
+      line-height: 1.4;
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .badge-pending {
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    .badge-done {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .meta {
+      font-size: 0.875rem;
+      color: #64748b;
+      margin-bottom: 4px;
+    }
+
+    .teacher {
+      font-size: 0.9rem;
+      color: #475569;
+      margin: 10px 0 14px;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn-date {
+      flex: 1;
+      min-width: 140px;
+      padding: 11px 12px;
+      font-size: 0.875rem;
+      border-radius: 10px;
+      font-weight: 500;
+    }
+
+    .btn-date-1 {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+    }
+
+    .btn-date-2 {
+      background: linear-gradient(135deg, #0ea5e9, #0284c7);
+      color: white;
+    }
+
+    .btn-date:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.05);
+    }
+
+    .btn-date:disabled {
+      background: #cbd5e1 !important;
+      color: #64748b !important;
+      transform: none;
+      cursor: not-allowed;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #94a3b8;
+    }
+
+    .footer-btn {
+      margin-top: 20px;
+      width: 100%;
+    }
+
+    @media (max-width: 480px) {
+      .search-box { flex-direction: column; }
+      .btn-group { flex-direction: column; }
+      .btn-date { min-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>ระบบขอสอบแก้ตัว</h1>
+      <p>สำหรับนักเรียน • ตรวจสอบและขอวันสอบแก้ตัว</p>
+    </div>
+
+    <div class="card">
+      <!-- ส่วนค้นหา -->
+      <div id="searchSection">
+        <label style="display:block; font-weight:600; margin-bottom:8px; color:#334155;">เลขประจำตัวนักเรียน</label>
+        <div class="search-box">
+          <input type="text" id="studentId" placeholder="กรอกเลขประจำตัว..." maxlength="20">
+          <button class="btn btn-primary" id="searchBtn" onclick="searchStudent()">
+            ค้นหา
+          </button>
+        </div>
+      </div>
+
+      <!-- ส่วนผลลัพธ์ -->
+      <div id="resultSection" style="display:none;">
+        <div class="student-badge" id="studentHeader"></div>
+        <div id="subjectList"></div>
+        <button class="btn btn-secondary footer-btn" onclick="resetForm()">
+          ← ค้นหาเลขประจำตัวใหม่
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentData = null;
+
+    function searchStudent() {
+      const id = document.getElementById('studentId').value.trim();
+      if (!id) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'กรุณากรอกเลขประจำตัว',
+          confirmButtonColor: '#2563eb'
+        });
+        return;
+      }
+
+      const btn = document.getElementById('searchBtn');
+      btn.disabled = true;
+      btn.innerHTML = 'กำลังค้นหา...';
+
+      google.script.run
+        .withSuccessHandler(res => {
+          btn.disabled = false;
+          btn.innerHTML = 'ค้นหา';
+
+          if (!res.success || res.subjects.length === 0) {
+            Swal.fire({
+              icon: 'info',
+              title: 'ไม่พบวิชาที่ต้องสอบแก้ตัว',
+              text: 'อาจสอบแก้ตัวครบแล้ว หรือเลขประจำตัวไม่ถูกต้อง',
+              confirmButtonColor: '#2563eb'
+            });
+            return;
+          }
+
+          currentData = res;
+          document.getElementById('searchSection').style.display = 'none';
+          document.getElementById('resultSection').style.display = 'block';
+
+          document.getElementById('studentHeader').innerHTML = `
+            <div class="label">นักเรียน</div>
+            <div class="name">${res.studentName}</div>
+          `;
+
+          let html = '';
+          res.subjects.forEach((s, index) => {
+            const isRequested = s.alreadyRequested;
+            html += `
+              <div class="subject-card ${isRequested ? 'requested' : ''}">
+                <div class="subject-header">
+                  <div class="subject-title">${index + 1}. ${s.subjectName}</div>
+                  <span class="badge ${isRequested ? 'badge-done' : 'badge-pending'}">
+                    ${isRequested ? 'ขอแล้ว' : 'รอขอ'}
+                  </span>
+                </div>
+                <div class="meta">รหัสวิชา: ${s.subjectCode || '-'}</div>
+                <div class="teacher">ครูประจำวิชา: <b>${s.teacherFull}</b></div>
+                
+                ${isRequested 
+                  ? `<div style="color:#15803d;font-size:0.9rem;margin-top:8px;">
+                       ✓ เคยขอไปแล้วเมื่อ ${s.requestedDate || '-'}
+                     </div>`
+                  : `<div class="btn-group">
+                       ${s.date1 ? `<button class="btn btn-date btn-date-1" onclick="requestDate(${index}, 1)">${s.date1}</button>` : ''}
+                       ${s.date2 ? `<button class="btn btn-date btn-date-2" onclick="requestDate(${index}, 2)">${s.date2}</button>` : ''}
+                     </div>`
+                }
+              </div>
+            `;
+          });
+          document.getElementById('subjectList').innerHTML = html;
+        })
+        .withFailureHandler(err => {
+          btn.disabled = false;
+          btn.innerHTML = 'ค้นหา';
+          Swal.fire({ icon: 'error', title: 'เกิดข้อผิดพลาด', text: err.message });
+        })
+        .getPendingSubjects(id);
+    }
+
+    function requestDate(index, dateNum) {
+      const s = currentData.subjects[index];
+      const dateText = dateNum === 1 ? s.date1 : s.date2;
+
+      Swal.fire({
+        title: 'ยืนยันการขอสอบแก้ตัว?',
+        html: `<div style="text-align:left;margin-top:12px;">
+                 <b>${s.subjectName}</b><br>
+                 <span style="color:#64748b">ใน${dateText}</span>
+               </div>`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#10b981',
+        cancelButtonColor: '#94a3b8',
+        confirmButtonText: 'ยืนยันส่งคำขอ',
+        cancelButtonText: 'ยกเลิก'
+      }).then(result => {
+        if (result.isConfirmed) {
+          const payload = {
+            rowIndex: s.rowIndex,
+            studentName: s.studentName,
+            studentId: s.studentId,
+            subjectName: s.subjectName,
+            subjectCode: s.subjectCode,
+            teacherFull: s.teacherFull,
+            dateText: dateText
+          };
+
+          google.script.run
+            .withSuccessHandler(() => {
+              Swal.fire({
+                icon: 'success',
+                title: 'ส่งคำขอสำเร็จ',
+                text: 'ระบบได้แจ้งครูทาง Telegram และบันทึกประวัติเรียบร้อยแล้ว',
+                timer: 2500,
+                showConfirmButton: false
+              });
+              
+              // อัปเดตหน้าจอทันที
+              s.alreadyRequested = true;
+              s.requestedDate = dateText;
+              // โหลดใหม่เพื่อแสดงสถานะล่าสุด
+              document.getElementById('studentId').value = s.studentId;
+              searchStudent();
+            })
+            .withFailureHandler(err => {
+              Swal.fire({ icon: 'error', title: 'ส่งไม่สำเร็จ', text: err.message });
+            })
+            .requestRetake(payload);
+        }
+      });
+    }
+
+    function resetForm() {
+      document.getElementById('studentId').value = '';
+      document.getElementById('searchSection').style.display = 'block';
+      document.getElementById('resultSection').style.display = 'none';
+      currentData = null;
+    }
+
+    // กด Enter เพื่อค้นหา
+    document.getElementById('studentId').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') searchStudent();
+    });
+  </script>
+</body>
+</html>
